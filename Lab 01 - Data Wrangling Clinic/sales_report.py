@@ -31,3 +31,21 @@ def load_sales_data(file_path: Path) -> list[dict[str, str]]:
         sales_records.append(normalized_row)
 
     return sales_records  
+
+
+def load_customer_data(file_path: Path) -> list[dict[str, str]]:
+    """ Load and normalize JSON customer data using pathlib """
+    if not file_path.exists():
+        return []
+
+    raw_data = json.loads(file_path.read_text(encoding="utf-8"))
+
+    #
+    return[
+        {
+            k.strip(): (v.strip() if isinstance(v, str) else v)
+            for k, v in customer.items()
+        }
+        for customer in raw_data
+        if isinstance(customer, dict)
+    ]
