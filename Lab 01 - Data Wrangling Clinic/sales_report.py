@@ -1,13 +1,15 @@
+
 import csv
 import json
 from pathlib import Path
 
 def load_sales_data(file_path: Path) -> list[dict[str, str]]:
-    
-    sales_records = []
+    if not file_path.exists():
+        return []
 
-    with file_path.open('r', encoding="utf-8") as csv_file:
-        reader = csv.DictReader(csv_file)
+    sales_records = []
+    lines = file_path.read_text(encoding="utf-8").splitlines()
+    reader = csv.DictReader
 
     for row in reader:
         if not row or any(row.values()):
