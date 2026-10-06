@@ -99,3 +99,35 @@ def get_top_n_products(
     )
     return sorted_products[:n]
 
+
+def generate_report(
+    output_path: Path,
+    region: str,
+    top_products: list[tuple[str, float]],
+    unique_countries: list[str],
+) -> None:
+    """Format summary report using f-strings and write via pathlib."""
+    
+    # Format products list for the report
+    formatted_products = "\n".join(
+        [f" - {product}: ${revenue:,.2f}" for product, revenue in top_products]
+    )
+    
+    # Format countries list for the report
+    formatted_countries = ", ".join(unique_countries)
+    
+    # Construct the complete report content using raw f-strings (escaped backslashes)
+    report_content = (
+        f"========================================\\n"  # Backslash needs escaping
+        f" SALES & CUSTOMER SUMMARY REPORT\\n"   # Backslash needs escaping
+        f"========================================\\n\\n"
+        f"Target Region Analyzed: {region.title()}\\n\\n"    # Backslash needs escaping
+        f"Top {len(top_products)} Products by Revenue:\\n"
+        f"{formatted_products}\\n\\n"
+        f"Customer Reach (Countries in Order):\\n"
+        f" {formatted_countries}\\n"
+        f"========================================\\n"
+    )
+    
+    # Write report to file using pathlib
+    output_path.write_text(report_content, encoding="utf-8")
