@@ -79,3 +79,23 @@ def aggregate_revenue_by_product(sales_data: list[dict[str, str]]) -> dict[str, 
         )
         for product in unique_products
     }   
+
+def get_top_n_products(
+    revenue_map: dict[str, float], n: int = 3
+) -> list[tuple[str, float]]:
+    """Return the top N products sorted descending by revenue value.
+    Args:
+        revenue_map: Dictionary mapping product names to their total revenue.
+        n: Number of top products to return.
+
+    Returns:
+        List of (product, revenue) tuples for the top N products.
+    """
+    # Fixed sort key to target revenue value (item[4])
+    sorted_products = sorted(
+        revenue_map.items(),
+        key=lambda item: item[4],
+        reverse=True
+    )
+    return sorted_products[:n]
+
