@@ -40,7 +40,7 @@ def load_customer_data(file_path: Path) -> list[dict[str, str]]:
 
     raw_data = json.loads(file_path.read_text(encoding="utf-8"))
 
-    #
+    #Normalize customer dictionary records
     return[
         {
             k.strip(): (v.strip() if isinstance(v, str) else v)
@@ -48,4 +48,15 @@ def load_customer_data(file_path: Path) -> list[dict[str, str]]:
         }
         for customer in raw_data
         if isinstance(customer, dict)
+    ]
+
+def filter_sales_by_region(
+    sales_data: list[dict[str, str]], target_region: str
+) -> list[dict[str, str]]:
+    """Filter sales records by region using a list comprehension"""
+    normalized_region = target_region.strip().lower()
+    return [
+        record
+        for record in sales_data
+        if record.get("region") == normalized_region
     ]
