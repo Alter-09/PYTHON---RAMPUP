@@ -60,3 +60,22 @@ def filter_sales_by_region(
         for record in sales_data
         if record.get("region") == normalized_region
     ]
+
+def aggregate_revenue_by_product(sales_data: list[dict[str, str]]) -> dict[str, float]:
+    """Calculate total revenue per product (units * unit_price) using a dict comprehension.
+    Args:
+        sales_data: List of normalized sales records.
+
+    Returns:
+        Dictionary mapping each product name to its total revenue.
+    """
+    unique_products = {r["product"] for r in sales_data if r.get("product")}
+    return {
+        product:
+        sum(
+            int(r["units"]) * float(r["unit_price"])
+            for r in sales_data
+            if r.get("product") == product
+        )
+        for product in unique_products
+    }   
