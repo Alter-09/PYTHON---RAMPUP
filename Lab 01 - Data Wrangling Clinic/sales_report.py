@@ -131,3 +131,32 @@ def generate_report(
     
     # Write report to file using pathlib
     output_path.write_text(report_content, encoding="utf-8")
+
+
+def main() -> None:
+    """Execution pipeline utilizing pathlib Path objects."""
+    base_dir = Path(__file__).parent if "__file__" in globals() else Path.cwd()
+    data_dir = base_dir / "data"
+    sales_file = data_dir / "sales.csv"
+    customer_file = data_dir / "customers.json"
+    report_file = base_dir / "report.txt"
+    
+    # Pipeline execution
+    sales_records = load_sales_data(sales_file)
+    customer_records = load_customer_data(customer_file)
+    target_region = "north america"
+    filtered_sales = filter_sales_by_region(sales_records, target_region)
+    revenue_by_product = aggregate_revenue_by_product(filtered_sales)
+    top_3_products = get_top_n_products(revenue_by_product, n=3)
+    countries = get_unique_countries(customer_records)
+    
+    generate_report(
+        output_path=report_file,
+        region=target_region,
+        top_products=top_3_products,
+        unique_countries=countries,
+    )
+
+
+if __name__ == "__main__":
+    main()
