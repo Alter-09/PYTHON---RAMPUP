@@ -130,15 +130,15 @@ def generate_report(
     
     # Construct the complete report content using raw f-strings (escaped backslashes)
     report_content = (
-        f"========================================\\n"  # Backslash needs escaping
-        f" SALES & CUSTOMER SUMMARY REPORT\\n"   # Backslash needs escaping
-        f"========================================\\n\\n"
-        f"Target Region Analyzed: {region.title()}\\n\\n"    # Backslash needs escaping
-        f"Top {len(top_products)} Products by Revenue:\\n"
-        f"{formatted_products}\\n\\n"
-        f"Customer Reach (Countries in Order):\\n"
-        f" {formatted_countries}\\n"
-        f"========================================\\n"
+        f"========================================\n"  # Backslash needs escaping
+        f" SALES & CUSTOMER SUMMARY REPORT\n"   # Backslash needs escaping
+        f"========================================\n\n"
+        f"Target Region Analyzed: {region.title()}\n\n"    # Backslash needs escaping
+        f"Top {len(top_products)} Products by Revenue:\n"
+        f"{formatted_products}\n\n"
+        f"Customer Reach (Countries in Order):\n"
+        f" {formatted_countries}\n"
+        f"========================================\n"
     )
     
     # Write report to file using pathlib
