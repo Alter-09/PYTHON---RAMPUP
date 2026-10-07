@@ -100,6 +100,18 @@ def get_top_n_products(
     return sorted_products[:n]
 
 
+def get_unique_countries(customer_data: list[dict[str, str]]) -> list[str]: 
+    """Extract unique countries preserving first-appearance order."""
+    seen = set()
+    unique_countries = []
+    for customer in customer_data:
+        country = customer.get("country", "")
+        if country and country not in seen:
+            seen.add(country)
+            unique_countries.append(country)
+    return unique_countries
+
+
 def generate_report(
     output_path: Path,
     region: str,
