@@ -1,0 +1,9 @@
+[
+    { "id": 1, "name": " Alice Smith ", "country": "United States" },
+    { "id": 2, "name": "Bob Jones", "country": "Canada" },
+    { "id": 3, "name": "Charlie Brown", "country": "United States" },
+    {},
+    { "id": 4, "name": "Diana Prince", "country": " Mexico " },
+    { "id": 5, "name": "Evan Wright", "country": "Canada" },
+    { "id": 6, "name": "Fiona Gallagher", "country": "Japan" }
+]

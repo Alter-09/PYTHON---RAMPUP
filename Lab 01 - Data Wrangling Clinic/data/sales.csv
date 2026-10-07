@@ -1,0 +1,8 @@
+product, units, unit_price, region 
+Laptop, 5, 1200.00, North America 
+Mouse , 15, 25.50, north america 
+Keyboard, 10, 75.00, NORTH AMERICA 
+Monitor, 4, 300.00, Europe 
+,,, 
+    Laptop , 2, 1200.00, NORTH AMERICA 
+Desk, 1, 450.00, Asia
