@@ -19,7 +19,7 @@ def load_sales_data(file_path: Path) -> list[dict[str, str]]:
     reader = csv.DictReader(lines)
 
     for row in reader:
-        if not row or any(row.values()):
+        if not row or not any(v and v.strip() for v in row.values()):
             continue
         normalized_row = {
             key.strip(): value.strip()
@@ -94,7 +94,7 @@ def get_top_n_products(
     # Fixed sort key to target revenue value (item[4])
     sorted_products = sorted(
         revenue_map.items(),
-        key=lambda item: item[4],
+        key=lambda item: item[1],
         reverse=True
     )
     return sorted_products[:n]
