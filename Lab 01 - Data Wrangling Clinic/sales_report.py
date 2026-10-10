@@ -16,7 +16,7 @@ def load_sales_data(file_path: Path) -> list[dict[str, str]]:
     sales_records = []
     # Read text via pathlib and parse with csv.DictReader
     lines = file_path.read_text(encoding="utf-8").splitlines()
-    reader = csv.DictReader
+    reader = csv.DictReader(lines)
 
     for row in reader:
         if not row or any(row.values()):
