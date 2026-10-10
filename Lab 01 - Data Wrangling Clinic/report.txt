@@ -4,9 +4,11 @@
 
 Target Region Analyzed: North America
 
-Top 0 Products by Revenue:
-
+Top 3 Products by Revenue:
+ - Laptop: $8,400.00
+ - Keyboard: $750.00
+ - Mouse: $382.50
 
 Customer Reach (Countries in Order):
- 
+ United States, Canada, Mexico, Japan
 ========================================
