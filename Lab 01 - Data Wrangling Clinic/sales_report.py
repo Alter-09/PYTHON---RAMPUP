@@ -100,13 +100,35 @@ def get_top_n_products(
     return sorted_products[:n]
 
 
-def get_unique_countries(customer_data: list[dict[str, str]]) -> list[str]: 
-    """Extract unique countries preserving first-appearance order."""
+# ============================================================================
+# Part C - Apply It: Lab 01 O(n) Lookup Optimization
+# ============================================================================
+
+def get_unique_countries_before(customer_data: list[dict[str, str]]) -> list[str]:
+    """BEFORE: Linear search in list.
+    
+    Checking 'country not in unique_countries' takes O(k) per customer.
+    Total Complexity: O(n^2).
+    """
+    unique_countries = []
+    for customer in customer_data:
+        country = customer.get("country", "")
+        if country and country not in unique_countries:  # O(n) linear scan
+            unique_countries.append(country)
+    return unique_countries
+
+
+def get_unique_countries(customer_data: list[dict[str, str]]) -> list[str]:
+    """AFTER: Optimized using a set for O(1) membership lookups.
+    
+    Checking 'country not in seen' takes O(1) average time.
+    Total Complexity: O(n) while preserving first-appearance order in list.
+    """
     seen = set()
     unique_countries = []
     for customer in customer_data:
         country = customer.get("country", "")
-        if country and country not in seen:
+        if country and country not in seen:  # O(1) hash set lookup
             seen.add(country)
             unique_countries.append(country)
     return unique_countries
