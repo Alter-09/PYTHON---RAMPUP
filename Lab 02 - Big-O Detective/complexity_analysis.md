@@ -110,3 +110,64 @@ def two_sum_dict(nums: list[int], target: int) -> tuple[int, int] | None:
 * **Why it's preferred**:
   * **Eliminates redundant checks**: Replaces repetitive manual boilerplate (`if key not in d: d[key] = []`) with `grouped[key].append(item)`.
   * **Performance**: Avoids performing two separate hash lookups (one for `if key not in d` and another for `d[key].append()`), performing the key lookup and list resolution in a single pass in **$\mathcal{O}(1)$ average time** per item (**$\mathcal{O}(n)$ total** for $n$ records).
+
+---
+
+## Part C - Apply It: Lab 01 Lookup Optimization (Before & After)
+
+### 1. Identified $\mathcal{O}(n)$ Lookup
+* **File**: `Lab 01 - Data Wrangling Clinic/sales_report.py`
+* **Function**: `get_unique_countries(customer_data)`
+* **Issue**: The original deduplication check used a Python `list` to check whether a country had already been processed (`if country not in unique_countries:`).
+
+---
+
+### 2. Code Comparison
+
+#### Before: Linear List Scan ($\mathcal{O}(n^2)$ Overall)
+```python
+def get_unique_countries_before(customer_data: list[dict[str, str]]) -> list[str]:
+    unique_countries = []
+    for customer in customer_data:
+        country = customer.get("country", "")
+        # Linear search across the growing list: O(k) comparisons per customer
+        if country and country not in unique_countries:
+            unique_countries.append(country)
+    return unique_countries
+```
+
+#### After: Hash Set Lookup ($\mathcal{O}(n)$ Overall)
+```python
+def get_unique_countries(customer_data: list[dict[str, str]]) -> list[str]:
+    seen = set()
+    unique_countries = []
+    for customer in customer_data:
+        country = customer.get("country", "")
+        # Hash table lookup: O(1) average comparisons per customer
+        if country and country not in seen:
+            seen.add(country)
+            unique_countries.append(country)
+    return unique_countries
+```
+
+---
+
+### 3. Detailed Justification & Complexity Analysis
+
+1. **Why the List Search Was $\mathcal{O}(n)$ per Element**:
+   * A Python `list` is a contiguous dynamic array of references.
+   * Evaluating `country not in unique_countries` performs a linear search from index `0` to the end of the list, comparing up to $k$ existing unique items.
+   * For $n$ customer records where unique items grow with $n$, the total comparisons in the worst case form an arithmetic progression:
+     $$1 + 2 + 3 + \dots + n = \frac{n(n + 1)}{2} \implies \mathcal{O}(n^2)$$
+   * As the customer database grows (e.g., from thousands to millions of rows), this quadratic scaling becomes a major performance bottleneck.
+
+2. **Why the Set Lookup Is $\mathcal{O}(1)$ per Element**:
+   * A Python `set` is implemented as an open-addressing hash table with perturbation resolution.
+   * Evaluating `country not in seen` hashes the string (`hash(country)`) to locate the memory bucket in **$\mathcal{O}(1)$ average time**.
+   * Adding to the set (`seen.add(country)`) also runs in **$\mathcal{O}(1)$ average time**.
+   * Total runtime across all $n$ customer records drops from quadratic to linear:
+     $$n \times \mathcal{O}(1) \implies \mathcal{O}(n)$$
+
+3. **Preserving Order & Correctness**:
+   * While a standard `set` provides fast lookups, converting directly with `list(set(...))` scrambles the first-appearance order required by the summary report.
+   * Combining an auxiliary tracking set (`seen`) for **$\mathcal{O}(1)$ lookups** with a result list (`unique_countries`) preserves both the exact output order and optimal $\mathcal{O}(n)$ runtime performance.
