@@ -11,9 +11,6 @@ from collections import Counter, OrderedDict, defaultdict, deque
 from typing import Any, Hashable
 
 # ============================================================================
-# 1. Word Frequency Counting (Counter vs dict.get)
-# ============================================================================
-# ============================================================================
 # Part A - Complexity Analysis Fragments
 # ============================================================================
 
