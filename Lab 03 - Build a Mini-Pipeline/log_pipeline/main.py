@@ -1,26 +1,38 @@
-from pathlib import Path
+"""Main entry point for log analysis pipeline."""
+
 from collections import Counter
-from log_pipeline.reader import iter_logs_lines
-from log_pipeline.reader import timed
+from pathlib import Path
+from log_pipeline import iter_log_lines, parse_logs, timed
+from generate_logs import generate_synthetic_logs
 
 @timed
-def process_pipeline(log_path: Path) -> None:
-    # 1. Line by line stream
-    raw_lines = iter_logs_lines(log_path)
+def run_pipeline(log_path: Path) -> None:
+    # 1. Pipeline de lectura e interpretación (Lazy)
+    raw_lines = iter_log_lines(log_path)
+    entries = parse_logs(raw_lines)
 
-    # 2. Error filtering generator expression (Lazy mode)
-    error_mssgs = (
-        line.split(" - ", 2)[-1]
-        for line in raw_lines
-        if "Error" in line
-    )
+    # 2. Expresión generadora para filtrar errores (Lazy)
+    error_entries = (entry for entry in entries if entry.level == "ERROR")
 
-    # 3. Efficient counting of top 5 errors using Counter
-    top_errors = Counter(error_mssgs).most_common(5)
+    # 3. Conteo de errores comunes
+    error_counts = Counter(entry.message for entry in error_entries)
 
-    print("\n--- Top 5 Errores ---")
-    for msg, count in top_errors:
-        print(f"[{count} veces]: {msg}")
+    print("\n========================================")
+    print(" LOG PIPELINE ANALYSIS REPORT ")
+    print("========================================")
+    print(f"Top 5 Most Frequent Error Messages:\n")
+    for message, count in error_counts.most_common(5):
+        print(f" [{count} occurrences]: {message}")
+    print("========================================\n")
+
 
 if __name__ == "__main__":
-    process_pipeline(Path("logs.log"))
+    log_file = Path("logs.log")
+    
+    if not log_file.exists():
+        print("Generating synthetic logs...")
+        generate_synthetic_logs(log_file, line_count=100_000)
+        print("Log file generated successfully.\n")
+    
+    print(f"Running log analysis pipeline for {log_file}:\n")
+    run_pipeline(log_file)
