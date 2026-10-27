@@ -22,3 +22,19 @@ def safe_open_log(file_path: Path) -> Generator[TextIO, None, None]:
         yield file_handle
     finally: 
         file_handle.close()
+
+
+def iter_log_lines(file_path: Path) -> Generator[str, None, None]: 
+    """
+    Yield lines one by one without loading the entire file into memory (O(1) space).
+    
+    Args:
+        file_path: Path to the log file to open.
+        
+    Returns:
+        Generator that yields each line from the file.
+    """
+    with safe_open_log(file_path) as file: 
+        for line in file: 
+            yield line.strip()
+
