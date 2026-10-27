@@ -38,3 +38,15 @@ def iter_log_lines(file_path: Path) -> Generator[str, None, None]:
         for line in file: 
             yield line.strip()
 
+def parse_logs(lines: Generator[str, None, None]) -> Generator[LogEntry, None, None]: 
+    """
+    Transform raw log string lines into structured LogEntry dataclass instances lazily.
+    """
+    for line in lines: 
+        if not line: 
+            continue 
+        parts = line.split(" - ", maxsplit=2) 
+        if len(parts) == 3: 
+            yield LogEntry(timestamp=parts, level=parts[6], message=parts[7])
+            
+    
