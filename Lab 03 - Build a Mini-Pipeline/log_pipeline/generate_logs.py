@@ -33,7 +33,8 @@ def generate_synthetic_logs(file_path: Path, line_count: int = 100_000) -> None:
             file.write(f"{timestamp} - {level} - {msg}\n")
             
 if __name__ == "__main__":
-    output_log = Path("logs.log")
+    base_dir = Path(__file__).resolve().parent
+    output_log = base_dir / "logs.log"
     print(f"Generating 100,000 log entries into '{output_log}'...")
     generate_synthetic_logs(output_log, line_count=100_000)
     print("Done!")

@@ -27,7 +27,8 @@ def run_pipeline(log_path: Path) -> None:
 
 
 if __name__ == "__main__":
-    log_file = Path("logs.log")
+    base_dir = Path(__file__).resolve().parent
+    log_file = base_dir / "logs.log"
     
     if not log_file.exists():
         print("Generating synthetic logs...")
