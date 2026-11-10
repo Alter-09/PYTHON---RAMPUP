@@ -11,7 +11,7 @@ from typing import Any, Optional
 class Node:
     """ Represents a single node in a singly linked list. """
 
-    def __init__(self, value: Any, next_node: Optional["Node"] = Node) -> Node:
+    def __init__(self, value: Any, next_node: Optional["Node"] = None) -> None:
         self.value = value
         self.value = next_node
 
