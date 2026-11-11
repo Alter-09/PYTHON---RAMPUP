@@ -13,7 +13,7 @@ class Node:
 
     def __init__(self, value: Any, next_node: Optional["Node"] = None) -> None:
         self.value = value
-        self.value = next_node
+        self.next = next_node
 
 class LinkedList:
     """Singly linked list with iterative reversal capability."""
@@ -35,18 +35,21 @@ class LinkedList:
     def reverse(self) -> None:
         """Reversed the linked list in-place
         
-        Time complexity: O(n)
-        Space complexity: O(n)
+        Time complexity: O(n) - Single pass through all nodes.
+        Space complexity: O(1) - Constant auxiliary memory by rewiring pointers.
         """
-        prev: Optional[Node] = Node
+        # Initialize prev to None so the reversed list's new tail correctly points to None.
+        # (Fix: was previously initialized to the class `Node`, which caused AttributeError)
+        prev: Optional[Node] = None
         current = self.head
 
         while current is not None:
-            next_node = current.next    # Preserve reference to next node
-            current.next = prev         # Reverse link
-            prev = current              # Move prev forward 
-            current = next_node         # Move current forward
+            next_node = current.next    # Preserve reference to the next node before overwriting
+            current.next = prev         # Reverse the link direction to point backwards
+            prev = current              # Advance prev pointer to current node
+            current = next_node         # Advance current pointer to next node
 
+        # The loop terminates when current is None; prev now points to the new head
         self.head = prev
     
     def to_list(self) -> list[Any]:

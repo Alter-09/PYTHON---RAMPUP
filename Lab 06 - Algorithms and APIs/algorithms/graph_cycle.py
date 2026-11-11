@@ -33,9 +33,9 @@ def has_cycle(graph: Dict[int, List[int]]) -> bool:
         rec_stack.remove(node)
         return False
 
-        #Iterate over all nodes to handle disconnected graph components
-        for node in graph:
-            if node not in visited:
-                if dfs(node):
-                    return True
-        return False
+    #Iterate over all nodes to handle disconnected graph components
+    for node in graph:
+        if node not in visited:
+            if dfs(node):
+                return True
+    return False

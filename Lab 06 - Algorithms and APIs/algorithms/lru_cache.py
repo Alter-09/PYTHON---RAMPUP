@@ -15,7 +15,7 @@ class LRUCache:
         if capacity <= 0:
             raise ValueError("Capacity must be a positive integer")
         self.capacity = capacity
-        self.cache = OrderedDict[Any, Any] = OrderedDict()
+        self.cache: OrderedDict[Any, Any] = OrderedDict()
     
     def get(self, key: Any) -> Any:
         """Retrieve key value and mark as most recently used. O(1) time."""
