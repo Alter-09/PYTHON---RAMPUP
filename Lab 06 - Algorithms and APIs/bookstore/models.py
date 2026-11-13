@@ -18,7 +18,7 @@ class Book(BaseModel):
     @field_validator("year")
     @classmethod
     def validate_year_not_future(cls, value:int) -> int:
-        """"""
+        """Validate that post date is not greater than present."""
         current_year = datetime.now().year
         if value > current_year:
             raise ValueError
@@ -28,7 +28,7 @@ class Book(BaseModel):
     @field_validator("isbn")
     @classmethod
     def validate_isbn_length(cls, value:str) -> str:
-        """"""
+        """Function to validate isbn length code."""
         clean_isbn = value.replace("-","").strip()
         if not (len(clean_isbn) in (10, 13) and clean_isbn.isalnum()):
             raise ValueError("Formato ISBN Inválido. Debe contener entre 10 a 13 caracteres alfanuméricos.") 
