@@ -11,7 +11,7 @@ app = FastAPI(
 )
 
 # In-memory storage
-books_db = dict[int, Book] = {}
+books_db: dict[int, Book] = {}
 
 @app.get("/books", response_model=list[Book], status_code=status.HTTP_200_OK) 
 def get_books(author: str | None = None) -> list[Book]: 
