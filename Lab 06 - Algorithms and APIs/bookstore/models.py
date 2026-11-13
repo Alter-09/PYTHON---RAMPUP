@@ -6,14 +6,14 @@ class Book(BaseModel):
     """Book Model Entity with Field and custom validators"""
 
     id: int = Field(..., description="Unique book identifier")
-    title: str = Field(..., min_lenght=1, description="Book title")
+    title: str = Field(..., min_length=1, description="Book title")
     author: str = Field(..., min_length=1, description="Book Author")
     year: int = Field(
         ...,
         ge=1450,
         description="Posting year"
     )
-    isbn: str = Field(..., description="ISBN Code from 10 to 13 chars")
+    isbn: str = Field(..., description="ISBN Code with 10 or 13 alphanumeric chars")
 
     @field_validator("year")
     @classmethod
