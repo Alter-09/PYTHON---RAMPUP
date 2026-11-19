@@ -1,52 +1,24 @@
 from contextlib import contextmanager
 from typing import Generator, TextIO
 from pathlib import Path
-from log_pipeline.models import LogEntry
+from log_pipeline_revamp.models import LogEntry
 
-@contextmanager
-def safe_open_log(file_path: Path) -> Generator[TextIO, None, None]:
-    """Custom context manager protecting file resource handle. 
-    
-    Guarantees the file handle closes in a finally block even if an exception occurs. 
-    
-    Args:
-        file_path: Path to the log file to open.
-        
-    Returns:
-        Generator that yields the file handle.
-    """
-    if not file_path.exists(): 
-        raise FileNotFoundError(f"Log file not found at: {file_path}") 
-    file_handle = file_path.open(mode="r", encoding="utf-8") 
-    try: 
-        yield file_handle
-    finally: 
-        file_handle.close()
+logger_reader = logging.getLogger("log_pipeline_revamp.reader")
 
 
-def iter_log_lines(file_path: Path) -> Generator[str, None, None]: 
-    """
-    Yield lines one by one without loading the entire file into memory (O(1) space).
-    
-    Args:
-        file_path: Path to the log file to open.
-        
-    Returns:
-        Generator that yields each line from the file.
-    """
-    with safe_open_log(file_path) as file: 
-        for line in file: 
-            yield line.strip()
+def stream_log_lines(file_path: Path) -> Generator[str, None, None]:
+    """Lee un archivo de log de forma perezosa línea por línea.
 
-def parse_logs(lines: Generator[str, None, None]) -> Generator[LogEntry, None, None]: 
+    Yields:
+        str: Cada línea individual de texto no vacía del archivo.
     """
-    Transform raw log string lines into structured LogEntry dataclass instances lazily.
-    """
-    for line in lines: 
-        if not line: 
-            continue 
-        parts = line.split(" - ", maxsplit=2) 
-        if len(parts) == 3: 
-            yield LogEntry(timestamp=parts[0], level=parts[1], message=parts[2])
-            
-    
+    if not file_path.exists():
+        logger_reader.error("Intento de acceso a archivo inexistente: %s", file_path)
+        raise ResourceNotFoundError(f"El archivo no existe en la ruta: {file_path}")
+
+    logger_reader.info("Abriendo flujo de lectura perezosa para: %s", file_path)
+    with file_path.open("r", encoding="utf-8") as f:
+        for line in f:
+            clean_line = line.strip()
+            if clean_line:
+                yield clean_line
